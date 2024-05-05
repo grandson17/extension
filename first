@@ -1,0 +1,52 @@
+// Function to find input fields where user can input their name or email
+function findNameAndEmailInputFields() {
+    const nameInputFields = [];
+    const emailInputFields = [];
+
+    // Select input fields of type text or email
+    const inputFields = document.querySelectorAll('input[type="text"], input[type="email"]');
+
+    // Iterate through input fields and check if they are likely to be name or email input fields
+    inputFields.forEach(field => {
+        // Get relevant identifier (name, id, or placeholder) for the input field
+        const identifier = field.name || field.id || field.placeholder || "Unnamed Field";
+
+        // Criteria used for name input fields
+        const nameCriteria = [
+            field.id.toLowerCase().includes("name"),
+            field.name.toLowerCase().includes("name"),
+            field.placeholder.toLowerCase().includes("name"),
+            (field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("name"))
+        ];
+
+        // Criteria used for email input fields
+        const emailCriteria = [
+            field.id.toLowerCase().includes("email"),
+            field.name.toLowerCase().includes("email"),
+            field.placeholder.toLowerCase().includes("email"),
+            (field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("email"))
+        ];
+
+        // Check if the field meets criteria for name or email input
+        if (nameCriteria.includes(true)) {
+            nameInputFields.push({ field: identifier, usedCriteria: nameCriteria });
+        } else if (emailCriteria.includes(true)) {
+            emailInputFields.push({ field: identifier, usedCriteria: emailCriteria });
+        }
+    });
+
+    return { nameInputFields, emailInputFields };
+}
+
+// Call the function and log the result
+const { nameInputFields, emailInputFields } = findNameAndEmailInputFields();
+console.log("Potential name input fields:");
+nameInputFields.forEach(item => {
+    console.log("Field Identifier:", item.field);
+    console.log("Used Criteria:", item.usedCriteria);
+});
+console.log("Potential email input fields:");
+emailInputFields.forEach(item => {
+    console.log("Field Identifier:", item.field);
+    console.log("Used Criteria:", item.usedCriteria);
+});
