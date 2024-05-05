@@ -1,0 +1,89 @@
+// Function to find input fields where user can input their name or email
+function findNameAndEmailInputFields() {
+    const nameInputFields = [];
+    const emailInputFields = [];
+
+    // Select input fields of type text or email
+    const inputFields = document.querySelectorAll('input[type="text"], input[type="email"]');
+
+    // Iterate through input fields and check if they are likely to be name or email input fields
+    inputFields.forEach(field => {
+        // Get relevant identifier (name, id, or placeholder) for the input field
+        const identifier = field.name || field.id || field.placeholder || "Unnamed Field";
+
+        // Criteria used for name input fields
+        const nameCriteria = [
+            field.id.toLowerCase().includes("name"),
+            field.name.toLowerCase().includes("name"),
+            field.placeholder.toLowerCase().includes("name"),
+            (field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("name"))
+        ];
+
+        // Criteria used for email input fields
+        const emailCriteria = [
+            field.id.toLowerCase().includes("email"),
+            field.name.toLowerCase().includes("email"),
+            field.placeholder.toLowerCase().includes("email"),
+            (field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("email"))
+        ];
+
+        // Check if the field meets criteria for name or email input
+        if (nameCriteria.includes(true)) {
+            nameInputFields.push({ field: identifier });
+        } else if (emailCriteria.includes(true)) {
+            emailInputFields.push({ field: identifier });
+        }
+    });
+
+    return { nameInputFields, emailInputFields };
+}
+
+// Function to create and display a message at the bottom right part of the screen
+function displayMessage(message) {
+    // Create a message element
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    messageElement.textContent = message;
+
+    // Style the message element
+    messageElement.style.position = 'fixed';
+    messageElement.style.bottom = '20px';
+    messageElement.style.right = '20px';
+    messageElement.style.backgroundColor = '#333';
+    messageElement.style.color = '#fff';
+    messageElement.style.padding = '10px';
+    messageElement.style.borderRadius = '5px';
+    messageElement.style.zIndex = '9999';
+
+    // Append the message element to the body
+    document.body.appendChild(messageElement);
+
+    // Remove the message after 5 seconds
+    setTimeout(() => {
+        messageElement.remove();
+    }, 5000);
+}
+
+// Call the function to find name and email input fields
+const { nameInputFields, emailInputFields } = findNameAndEmailInputFields();
+
+// Construct message for name input fields
+let nameMessage = "Potential name input fields:\n";
+nameInputFields.forEach(item => {
+    nameMessage += `\nField Identifier: ${item.field}\n`;
+});
+
+// Display first message at the bottom right part of the screen
+displayMessage(nameMessage);
+
+// After 2 seconds, construct message for email input fields and display it
+setTimeout(() => {
+    // Construct message for email input fields
+    let emailMessage = "Potential email input fields:\n";
+    emailInputFields.forEach(item => {
+        emailMessage += `\nField Identifier: ${item.field}\n`;
+    });
+
+    // Display second message at the bottom right part of the screen
+    displayMessage(emailMessage);
+}, 2000);
