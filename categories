@@ -1,0 +1,115 @@
+function findInputFields() {
+    const personalInfoInputFields = [];
+    const sensitiveInputFields = [];
+    const generalDataInputFields = [];
+    const healthDataInputFields = [];
+
+    const inputFields = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], select');
+
+    inputFields.forEach(field => {
+        const identifier = field.name || field.id || field.placeholder || "Unnamed Field";
+
+        const nameCriteria = [
+            field.id && field.id.toLowerCase().includes("name"),
+            field.name && field.name.toLowerCase().includes("name"),
+            field.placeholder && field.placeholder.toLowerCase().includes("name"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("name")
+        ];
+
+        const emailCriteria = [
+            field.id && field.id.toLowerCase().includes("email"),
+            field.name && field.name.toLowerCase().includes("email"),
+            field.placeholder && field.placeholder.toLowerCase().includes("email"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("email")
+        ];
+
+        const idCriteria = [
+            field.id && field.id.toLowerCase().includes("id"),
+            field.name && field.name.toLowerCase().includes("id"),
+            field.placeholder && field.placeholder.toLowerCase().includes("id"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("id")
+        ];
+
+        const dobCriteria = [
+            field.id && field.id.toLowerCase().includes("dob"),
+            field.name && field.name.toLowerCase().includes("dob"),
+            field.placeholder && field.placeholder.toLowerCase().includes("dob"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("dob"),
+            field.id && field.id.toLowerCase().includes("dateofbirth"),
+            field.name && field.name.toLowerCase().includes("dateofbirth"),
+            field.placeholder && field.placeholder.toLowerCase().includes("dateofbirth"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("dateofbirth")
+        ];
+
+        const ethnicCriteria = [
+            field.id && field.id.toLowerCase().includes("ethnic"),
+            field.name && field.name.toLowerCase().includes("ethnic"),
+            field.placeholder && field.placeholder.toLowerCase().includes("ethnic"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("ethnic"),
+            field.id && field.id.toLowerCase().includes("tribe"),
+            field.name && field.name.toLowerCase().includes("tribe"),
+            field.placeholder && field.placeholder.toLowerCase().includes("tribe"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("tribe")
+        ];
+
+        const maritalStatusCriteria = [
+            field.id && field.id.toLowerCase().includes("maritalstatus"),
+            field.name && field.name.toLowerCase().includes("maritalstatus"),
+            field.placeholder && field.placeholder.toLowerCase().includes("maritalstatus"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("maritalstatus"),
+            field.id && field.id.toLowerCase().includes("maritalstatus"),
+            field.name && field.name.toLowerCase().includes("maritalstatus"),
+            field.placeholder && field.placeholder.toLowerCase().includes("maritalstatus"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("maritalstatus")
+        ];
+
+        const healthStatusCriteria = [
+            field.id && field.id.toLowerCase().includes("health"),
+            field.name && field.name.toLowerCase().includes("health"),
+            field.placeholder && field.placeholder.toLowerCase().includes("health"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("health"),
+            field.id && field.id.toLowerCase().includes("disease"),
+            field.name && field.name.toLowerCase().includes("disease"),
+            field.placeholder && field.placeholder.toLowerCase().includes("disease"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("disease"),
+            field.id && field.id.toLowerCase().includes("infection"),
+            field.name && field.name.toLowerCase().includes("infection"),
+            field.placeholder && field.placeholder.toLowerCase().includes("infection"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("infection")
+        ];
+
+        const countryCriteria = [
+            field.id && field.id.toLowerCase().includes("country"),
+            field.name && field.name.toLowerCase().includes("country"),
+            field.placeholder && field.placeholder.toLowerCase().includes("country"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("country"),
+            field.id && field.id.toLowerCase().includes("nationality"),
+            field.name && field.name.toLowerCase().includes("nationality"),
+            field.placeholder && field.placeholder.toLowerCase().includes("nationality"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("nationality"),
+            field.id && field.id.toLowerCase().includes("region"),
+            field.name && field.name.toLowerCase().includes("region"),
+            field.placeholder && field.placeholder.toLowerCase().includes("region"),
+            field.labels && field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("region")
+        ];
+
+        if (nameCriteria.includes(true) || emailCriteria.includes(true) || idCriteria.includes(true) || dobCriteria.includes(true)) {
+            personalInfoInputFields.push({ field: identifier });
+        } else if (ethnicCriteria.includes(true) || maritalStatusCriteria.includes(true)) {
+            sensitiveInputFields.push({ field: identifier });
+        } else if (healthStatusCriteria.includes(true)) {
+            healthDataInputFields.push({ field: identifier });
+        } else if (countryCriteria.includes(true)) {
+            generalDataInputFields.push({ field: identifier });
+        }
+    });
+
+    return { personalInfoInputFields, sensitiveInputFields, healthDataInputFields, generalDataInputFields };
+}
+
+const { personalInfoInputFields, sensitiveInputFields, healthDataInputFields, generalDataInputFields } = findInputFields();
+
+console.log("Personal Identifiable Information input fields:", personalInfoInputFields);
+console.log("Sensitive input fields:", sensitiveInputFields);
+console.log("Health Data input fields:", healthDataInputFields);
+console.log("General Data input fields:", generalDataInputFields);
