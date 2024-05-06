@@ -1,0 +1,118 @@
+// Function to add CSS styles for the .message class
+function addMessageStyles() {
+    // Create a <style> element
+    const style = document.createElement('style');
+    style.textContent = `
+        .message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 9999;
+        }
+    `;
+
+    // Append the <style> element to the document's <head>
+    document.head.appendChild(style);
+}
+
+// Call the function to add message styles
+addMessageStyles();
+
+// Function to find input fields where user can input their name, email, or identification number (ID)
+function findNameEmailAndIDInputFields() {
+    const nameInputFields = [];
+    const emailInputFields = [];
+    const idInputFields = [];
+
+    // Select input fields of type text or email
+    const inputFields = document.querySelectorAll('input[type="text"], input[type="email"]');
+
+    // Iterate through input fields and check if they are likely to be name, email, or ID input fields
+    inputFields.forEach(field => {
+        // Get relevant identifier (name, id, or placeholder) for the input field
+        const identifier = field.name || field.id || field.placeholder || "Unnamed Field";
+
+        // Criteria used for name input fields
+        const nameCriteria = [
+            field.id.toLowerCase().includes("name"),
+            field.name.toLowerCase().includes("name"),
+            field.placeholder.toLowerCase().includes("name"),
+            (field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("name"))
+        ];
+
+        // Criteria used for email input fields
+        const emailCriteria = [
+            field.id.toLowerCase().includes("email"),
+            field.name.toLowerCase().includes("email"),
+            field.placeholder.toLowerCase().includes("email"),
+            (field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("email"))
+        ];
+
+        // Criteria used for ID input fields
+        const idCriteria = [
+            field.id.toLowerCase().includes("id"),
+            field.name.toLowerCase().includes("id"),
+            field.placeholder.toLowerCase().includes("id"),
+            (field.labels.length > 0 && field.labels[0].textContent.toLowerCase().includes("id"))
+        ];
+
+        // Check if the field meets criteria for name, email, or ID input
+        if (nameCriteria.includes(true)) {
+            nameInputFields.push({ field: identifier });
+        } else if (emailCriteria.includes(true)) {
+            emailInputFields.push({ field: identifier });
+        } else if (idCriteria.includes(true)) {
+            idInputFields.push({ field: identifier });
+        }
+    });
+
+    return { nameInputFields, emailInputFields, idInputFields };
+}
+
+// Function to create and display a message at the bottom right part of the screen
+function displayMessage(message) {
+    // Create a message element
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    messageElement.textContent = message;
+
+    // Append the message element to the body
+    document.body.appendChild(messageElement);
+
+    // Remove the message after 5 seconds
+    setTimeout(() => {
+        messageElement.remove();
+    }, 5000);
+}
+
+// Call the function to find name, email, and ID input fields
+const { nameInputFields, emailInputFields, idInputFields } = findNameEmailAndIDInputFields();
+
+// Construct messages for name, email, and ID input fields
+let nameMessage = "Potential name input fields:\n";
+nameInputFields.forEach(item => {
+    nameMessage += `Field Identifier: ${item.field}\n`;
+});
+
+let emailMessage = "Potential email input fields:\n";
+emailInputFields.forEach(item => {
+    emailMessage += `Field Identifier: ${item.field}\n`;
+});
+
+let idMessage = "Potential ID input fields:\n";
+idInputFields.forEach(item => {
+    idMessage += `Field Identifier: ${item.field}\n`;
+});
+
+// Display messages sequentially with a delay between each
+displayMessage(nameMessage);
+setTimeout(() => {
+    displayMessage(emailMessage);
+}, 6000); // Delayed by 6 seconds to show after the name message
+setTimeout(() => {
+    displayMessage(idMessage);
+}, 12000); // Delayed by 12 seconds to show after the email message
